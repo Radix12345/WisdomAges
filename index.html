@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Old Man Wisdom</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2829/2829818.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #222; /* Fallback */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            transition: background 1.5s ease-in-out; /* Slower, smoother fade */
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 20px;
+        }
+
+        /* Logo Styling */
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255,202,40,0.5));
+        }
+
+        h1 { 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            letter-spacing: 5px; 
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 5px;
+        }
+
+        #category-text { 
+            color: #ffca28;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        #quote-text { 
+            font-size: 26px; 
+            margin-bottom: 40px; 
+            font-weight: 300; 
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        button {
+            padding: 12px 35px;
+            font-size: 14px;
+            background: linear-gradient(45deg, #ffca28, #ffa000);
+            color: #222;
+            border: none;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        /* Loading bar for the 7 seconds */
+        .progress-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #ffca28;
+            transition: width 7s linear; /* Matches your 7 seconds */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" class="logo" alt="logo">
+        
+        <h1>Wisdom of the Ages</h1>
+        <p id="category-text">Preparing Wisdom...</p>
+        <p id="quote-text">"The best is yet to come."</p>
+        
+        <button onclick="resetTimer()">Next Wisdom</button>
+
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        const wisdomList = [
+    // --- PART 1: THE ORIGINAL 100 ---
+    { "id": 1, "category": "Relationships", "text": "Marry the person you want to talk to for the rest of your life. Looks fade; conversation remains." },
+    { "id": 2, "category": "Relationships", "text": "Never go to sleep angry. Stay up and fix it, or agree to pause until morning." },
+    { "id": 3, "category": "Relationships", "text": "Love is a verb, not a feeling. You have to do it every day." },
+    { "id": 4, "category": "Relationships", "text": "If you have to choose between being right and being happy, choose happy." },
+    { "id": 5, "category": "Relationships", "text": "A compliment costs you nothing but can make someone’s entire week." },
+    { "id": 6, "category": "Relationships", "text": "Don’t criticize your partner in public. Ever." },
+    { "id": 7, "category": "Relationships", "text": "Listen to understand, not just to reply." },
+    { "id": 8, "category": "Relationships", "text": "Buying flowers for no reason is better than buying them for a reason." },
+    { "id": 9, "category": "Relationships", "text": "Your kids are only little once. Put the phone down." },
+    { "id": 10, "category": "Relationships", "text": "Treat the janitor with the same respect as the CEO." },
+    { "id": 11, "category": "Money", "text": "Money screams, wealth whispers." },
+    { "id": 12, "category": "Money", "text": "If you buy things you don’t need, you’ll soon sell things you need." },
+    { "id": 13, "category": "Money", "text": "The best investment you can make is in your own skills." },
+    { "id": 14, "category": "Money", "text": "Don’t work yourself to death. Your job posted your position before your obituary was printed." },
+    { "id": 15, "category": "Money", "text": "Compound interest is the 8th wonder of the world. Start early." },
+    { "id": 16, "category": "Money", "text": "Never lend money you aren’t willing to gift." },
+    { "id": 17, "category": "Money", "text": "A handshake used to mean something. Make yours count." },
+    { "id": 18, "category": "Money", "text": "Don’t chase status; chase freedom." },
+    { "id": 19, "category": "Money", "text": "If it sounds too good to be true, it is." },
+    { "id": 20, "category": "Money", "text": "Save for a rainy day, because it will rain." },
+    { "id": 21, "category": "Character", "text": "Your word is your bond. Break it, and you break yourself." },
+    { "id": 22, "category": "Character", "text": "Integrity is doing the right thing when no one is watching." },
+    { "id": 23, "category": "Character", "text": "Admit when you are wrong. It shows strength, not weakness." },
+    { "id": 24, "category": "Character", "text": "Character is revealed in how you treat those who can do nothing for you." },
+    { "id": 25, "category": "Character", "text": "Be the man you want your daughter to marry (or your son to be)." },
+    { "id": 26, "category": "Character", "text": "Don’t make promises when you’re happy; don’t make decisions when you’re angry." },
+    { "id": 27, "category": "Character", "text": "A clear conscience is the softest pillow." },
+    { "id": 28, "category": "Character", "text": "Manners are the oil that keeps society running smoothly. Use them." },
+    { "id": 29, "category": "Character", "text": "Humility is not thinking less of yourself, it’s thinking of yourself less." },
+    { "id": 30, "category": "Character", "text": "Stand for something, or you’ll fall for anything." },
+    { "id": 31, "category": "Time", "text": "This too shall pass. The good times and the bad." },
+    { "id": 32, "category": "Time", "text": "You will regret the things you didn’t do more than the things you did." },
+    { "id": 33, "category": "Time", "text": "Youth is a gift of nature, but age is a work of art." },
+    { "id": 34, "category": "Time", "text": "Stop waiting for the 'perfect moment.' It doesn’t exist." },
+    { "id": 35, "category": "Time", "text": "Call your parents. One day you won’t be able to." },
+    { "id": 36, "category": "Time", "text": "Life goes faster the older you get. Slow down." },
+    { "id": 37, "category": "Time", "text": "Don't live the same year 75 times and call it a life." },
+    { "id": 38, "category": "Time", "text": "The graveyard is full of indispensable men." },
+    { "id": 39, "category": "Time", "text": "Worrying is like a rocking chair: it gives you something to do but gets you nowhere." },
+    { "id": 40, "category": "Time", "text": "Yesterday is a canceled check, tomorrow is a promissory note, today is cash. Spend it wisely." },
+    { "id": 41, "category": "Health", "text": "Take care of your knees. You’ll miss them when they’re gone." },
+    { "id": 42, "category": "Health", "text": "Drink more water. Seriously." },
+    { "id": 43, "category": "Health", "text": "Floss. Dental pain is the worst pain." },
+    { "id": 44, "category": "Health", "text": "Movement is medicine. Keep walking." },
+    { "id": 45, "category": "Health", "text": "Eat to live, don’t live to eat." },
+    { "id": 46, "category": "Health", "text": "Sleep is when your brain takes out the trash. Don’t skip it." },
+    { "id": 47, "category": "Health", "text": "Wear sunscreen." },
+    { "id": 48, "category": "Health", "text": "Stretching every morning keeps the doctor away better than an apple." },
+    { "id": 49, "category": "Health", "text": "Alcohol borrows happiness from tomorrow." },
+    { "id": 50, "category": "Health", "text": "Your body is the only house you have to live in forever." },
+    { "id": 51, "category": "Mindset", "text": "Meaning is found in responsibility, not pleasure." },
+    { "id": 52, "category": "Mindset", "text": "If you’re going through hell, keep going." },
+    { "id": 53, "category": "Mindset", "text": "Pain is inevitable; suffering is optional." },
+    { "id": 54, "category": "Mindset", "text": "You can’t control the wind, but you can adjust your sails." },
+    { "id": 55, "category": "Mindset", "text": "Failure is just a lesson in what doesn’t work." },
+    { "id": 56, "category": "Mindset", "text": "Comparison is the thief of joy. Run your own race." },
+    { "id": 57, "category": "Mindset", "text": "A smooth sea never made a skilled sailor." },
+    { "id": 58, "category": "Mindset", "text": "It’s not what happens to you, it’s how you react to it." },
+    { "id": 59, "category": "Mindset", "text": "Gratitude turns what we have into enough." },
+    { "id": 60, "category": "Mindset", "text": "The only person you should try to be better than is the person you were yesterday." },
+    { "id": 61, "category": "Social", "text": "You are the average of the five people you spend the most time with." },
+    { "id": 62, "category": "Social", "text": "A true friend walks in when the rest of the world walks out." },
+    { "id": 63, "category": "Social", "text": "Don’t burn bridges. You might need to cross them again." },
+    { "id": 64, "category": "Social", "text": "Learn to say 'No' without explaining yourself." },
+    { "id": 65, "category": "Social", "text": "People will forget what you said, but they’ll never forget how you made them feel." },
+    { "id": 66, "category": "Social", "text": "Gossip is poison. If they gossip to you, they gossip about you." },
+    { "id": 67, "category": "Social", "text": "Forgive your enemies, but never forget their names." },
+    { "id": 68, "category": "Social", "text": "Show up. Half of success is just showing up." },
+    { "id": 69, "category": "Social", "text": "Be the friend you wish you had." },
+    { "id": 70, "category": "Social", "text": "Don’t overstay your welcome." },
+    { "id": 71, "category": "Learning", "text": "Read more books. They are cheat codes from smart people." },
+    { "id": 72, "category": "Learning", "text": "You don’t know what you don’t know. Stay humble." },
+    { "id": 73, "category": "Learning", "text": "The man who asks a question is a fool for a minute; the man who does not is a fool for life." },
+    { "id": 74, "category": "Learning", "text": "Travel is the only thing you buy that makes you richer." },
+    { "id": 75, "category": "Learning", "text": "Experience is a hard teacher because she gives the test first, the lesson afterwards." },
+    { "id": 76, "category": "Learning", "text": "Learn how to cook a few good meals." },
+    { "id": 77, "category": "Learning", "text": "Learn to fix things. It’s satisfying." },
+    { "id": 78, "category": "Learning", "text": "Keep your mind open, but not so open that your brain falls out." },
+    { "id": 79, "category": "Learning", "text": "History repeats itself. Learn it." },
+    { "id": 80, "category": "Learning", "text": "Silence is sometimes the best answer." },
+    { "id": 81, "category": "Happiness", "text": "Happiness is an inside job. Don’t assign it to anyone else." },
+    { "id": 82, "category": "Happiness", "text": "Enjoy the little things. One day you may look back and realize they were the big things." },
+    { "id": 83, "category": "Happiness", "text": "You can’t please everyone. You aren’t a jar of Nutella." },
+    { "id": 84, "category": "Happiness", "text": "Don’t take yourself too seriously. Nobody else does." },
+    { "id": 85, "category": "Happiness", "text": "The best things in life aren’t things." },
+    { "id": 86, "category": "Happiness", "text": "Boredom is good for the creative mind." },
+    { "id": 87, "category": "Happiness", "text": "A cluttered space equals a cluttered mind." },
+    { "id": 88, "category": "Happiness", "text": "Nature heals. Go outside." },
+    { "id": 89, "category": "Happiness", "text": "Laugh loudly and often." },
+    { "id": 90, "category": "Happiness", "text": "Peace of mind is the ultimate wealth." },
+    { "id": 91, "category": "Hard Truths", "text": "No one owes you anything." },
+    { "id": 92, "category": "Hard Truths", "text": "Life isn’t fair. Get used to it." },
+    { "id": 93, "category": "Hard Truths", "text": "Fear is a reaction. Courage is a decision." },
+    { "id": 94, "category": "Hard Truths", "text": "Everything in moderation, including moderation." },
+    { "id": 95, "category": "Hard Truths", "text": "You teach people how to treat you." },
+    { "id": 96, "category": "Hard Truths", "text": "Trust your gut. It knows before your head does." },
+    { "id": 97, "category": "Hard Truths", "text": "Leave things better than you found them." },
+    { "id": 98, "category": "Hard Truths", "text": "It’s never too late to start over." },
+    { "id": 99, "category": "Hard Truths", "text": "Don’t die with the music still in you." },
+    { "id": 100, "category": "Hard Truths", "text": "Live as if you will die tomorrow. Learn as if you will live forever." },
+
+    // --- PART 2: THE NEW 100 ---
+    { "id": 101, "category": "Inner Peace", "text": "Never make a permanent decision based on a temporary emotion." },
+    { "id": 102, "category": "Inner Peace", "text": "You don’t have to attend every argument you’re invited to." },
+    { "id": 103, "category": "Inner Peace", "text": "If you want to be at peace, stop expecting people to act how you would." },
+    { "id": 104, "category": "Inner Peace", "text": "The smartest person in the room is usually the one listening." },
+    { "id": 105, "category": "Inner Peace", "text": "Your value doesn't decrease based on someone’s inability to see your worth." },
+    { "id": 106, "category": "Inner Peace", "text": "Seeking revenge is like digging two graves." },
+    { "id": 107, "category": "Inner Peace", "text": "Self-respect is more important than being liked." },
+    { "id": 108, "category": "Inner Peace", "text": "Don’t let the world make you hard; stay kind but keep your boundaries." },
+    { "id": 109, "category": "Inner Peace", "text": "You can’t heal in the same environment that made you sick." },
+    { "id": 110, "category": "Inner Peace", "text": "Forgive yourself for what you didn't know then." },
+    { "id": 111, "category": "Career", "text": "Don't be so busy making a living that you forget to make a life." },
+    { "id": 112, "category": "Career", "text": "Skill is cheap; passion is common; discipline is rare." },
+    { "id": 113, "category": "Career", "text": "If you’re the smartest person in the room, you’re in the wrong room." },
+    { "id": 114, "category": "Career", "text": "Your reputation takes 20 years to build and 5 minutes to ruin." },
+    { "id": 115, "category": "Career", "text": "Dress for the job you want, but work like you own the company." },
+    { "id": 116, "category": "Career", "text": "A job is what you do; your work is who you are." },
+    { "id": 117, "category": "Career", "text": "Never burn a bridge you might need to cross twice." },
+    { "id": 118, "category": "Career", "text": "The best way to predict the future is to create it." },
+    { "id": 119, "category": "Career", "text": "Don't complain about results you didn't work for." },
+    { "id": 120, "category": "Career", "text": "Success is liking yourself, liking what you do, and liking how you do it." },
+    { "id": 121, "category": "Social", "text": "To be interesting, be interested." },
+    { "id": 122, "category": "Social", "text": "Remember a person’s name; it’s the sweetest sound in any language to them." },
+    { "id": 123, "category": "Social", "text": "Avoid people who only call you when they need something." },
+    { "id": 124, "category": "Social", "text": "Keep your circle small and your private life private." },
+    { "id": 125, "category": "Social", "text": "Never tell people your plans; show them your results." },
+    { "id": 126, "category": "Social", "text": "A friend to everyone is a friend to no one." },
+    { "id": 127, "category": "Social", "text": "If you want to know a person's character, watch how they treat a waiter." },
+    { "id": 128, "category": "Social", "text": "Be the person people feel safe around." },
+    { "id": 129, "category": "Social", "text": "Don't take advice from people who aren't where you want to be." },
+    { "id": 130, "category": "Social", "text": "Give people their 'flowers' while they can still smell them." },
+    { "id": 131, "category": "Practical", "text": "Always keep a jumper cable and a spare tire in the car." },
+    { "id": 132, "category": "Practical", "text": "Buy quality tools; you only have to buy them once." },
+    { "id": 133, "category": "Practical", "text": "Learn to say 'I don't know' instead of making things up." },
+    { "id": 134, "category": "Practical", "text": "If you use it every day (bed, shoes, chair), spend the extra money on it." },
+    { "id": 135, "category": "Practical", "text": "Learn to sit in a room alone in silence." },
+    { "id": 136, "category": "Practical", "text": "Measure twice, cut once." },
+    { "id": 137, "category": "Practical", "text": "Keep a clean workspace; it clears the mind." },
+    { "id": 138, "category": "Practical", "text": "Never go grocery shopping when you are hungry." },
+    { "id": 139, "category": "Practical", "text": "Always leave a place a little better than you found it." },
+    { "id": 140, "category": "Practical", "text": "Learn to change your own oil and your own mind." },
+    { "id": 141, "category": "Aging", "text": "Youth is a state of mind, not a time of life." },
+    { "id": 142, "category": "Aging", "text": "The 'good old days' are happening right now." },
+    { "id": 143, "category": "Aging", "text": "Don't let your memories be better than your dreams." },
+    { "id": 144, "category": "Aging", "text": "Wrinkles are just a map of where smiles have been." },
+    { "id": 145, "category": "Aging", "text": "You aren't getting older; you're becoming a classic." },
+    { "id": 146, "category": "Aging", "text": "Everyone you meet is afraid of something, loves something, and has lost something." },
+    { "id": 147, "category": "Aging", "text": "Life is 10% what happens to us and 90% how we react to it." },
+    { "id": 148, "category": "Aging", "text": "Be patient with the versions of yourself that didn't have the tools you have now." },
+    { "id": 149, "category": "Aging", "text": "You can't start the next chapter if you keep re-reading the last one." },
+    { "id": 150, "category": "Aging", "text": "Death isn't the greatest loss; the greatest loss is what dies inside us while we live." },
+    { "id": 151, "category": "Money", "text": "Being rich is having money; being wealthy is having time." },
+    { "id": 152, "category": "Money", "text": "Don't work for money; make your money work for you." },
+    { "id": 153, "category": "Money", "text": "Debt is a thief of your future." },
+    { "id": 154, "category": "Money", "text": "True wealth is the ability to fully experience life." },
+    { "id": 155, "category": "Money", "text": "It’s not about how much you make, but how much you keep." },
+    { "id": 156, "category": "Money", "text": "Spend on experiences, not possessions." },
+    { "id": 157, "category": "Money", "text": "Financial peace isn't the acquisition of stuff; it's learning to live on less than you make." },
+    { "id": 158, "category": "Money", "text": "Don't look at the price tag; look at the value." },
+    { "id": 159, "category": "Money", "text": "The best things in life are free; the second-best things are very expensive." },
+    { "id": 160, "category": "Money", "text": "Invest in your health before you have to spend your wealth to get it back." },
+    { "id": 161, "category": "Resilience", "text": "Hard times create strong men." },
+    { "id": 162, "category": "Resilience", "text": "Rock bottom is a solid foundation to build on." },
+    { "id": 163, "category": "Resilience", "text": "If you're tired, learn to rest, not to quit." },
+    { "id": 164, "category": "Resilience", "text": "The only way out is through." },
+    { "id": 165, "category": "Resilience", "text": "Comfort is the enemy of growth." },
+    { "id": 166, "category": "Resilience", "text": "Smooth seas don't make skillful sailors." },
+    { "id": 167, "category": "Resilience", "text": "Don't let a bad day make you feel like you have a bad life." },
+    { "id": 168, "category": "Resilience", "text": "Courage isn't the absence of fear; it's moving forward despite it." },
+    { "id": 169, "category": "Resilience", "text": "Character is built in the dark, but it shines in the light." },
+    { "id": 170, "category": "Resilience", "text": "You are stronger than you think you are." },
+    { "id": 171, "category": "Family", "text": "A happy wife is a happy life, but a happy husband is a happy home." },
+    { "id": 172, "category": "Family", "text": "Your family is the only team you'll ever be on for life." },
+    { "id": 173, "category": "Family", "text": "Time spent with children is never wasted." },
+    { "id": 174, "category": "Family", "text": "Love doesn't mean you won't fight; it means you'll always find your way back." },
+    { "id": 175, "category": "Family", "text": "Forgiveness is the glue of a long-lasting marriage." },
+    { "id": 176, "category": "Family", "text": "Don't take your parents for granted; they are the only people who loved you before you were you." },
+    { "id": 177, "category": "Family", "text": "Home isn't a place; it's a feeling." },
+    { "id": 178, "category": "Family", "text": "Be the kind of person you would want to come home to." },
+    { "id": 179, "category": "Family", "text": "A shared meal is the best therapy." },
+    { "id": 180, "category": "Family", "text": "Never be too busy to tell someone you love them." },
+    { "id": 181, "category": "Mindset", "text": "Simplify, then add lightness." },
+    { "id": 182, "category": "Mindset", "text": "Busy is a choice; don't brag about it." },
+    { "id": 183, "category": "Mindset", "text": "Most things that matter aren't urgent, and most things that are urgent don't matter." },
+    { "id": 184, "category": "Mindset", "text": "Collect moments, not things." },
+    { "id": 185, "category": "Mindset", "text": "Gratitude is the antidote to envy." },
+    { "id": 186, "category": "Mindset", "text": "Don't overthink it; just start." },
+    { "id": 187, "category": "Mindset", "text": "Live simply so that others may simply live." },
+    { "id": 188, "category": "Mindset", "text": "Comparison is the thief of joy." },
+    { "id": 189, "category": "Mindset", "text": "Just because you can doesn't mean you should." },
+    { "id": 190, "category": "Mindset", "text": "Happiness is not a destination; it's a way of travel." },
+    { "id": 191, "category": "Hard Truths", "text": "No one is coming to save you; you are your own hero." },
+    { "id": 192, "category": "Hard Truths", "text": "Most people don't actually care about your failures as much as you think they do." },
+    { "id": 193, "category": "Hard Truths", "text": "You can't change the people around you, but you can change the people around you." },
+    { "id": 194, "category": "Hard Truths", "text": "Life is short, but it's the longest thing you'll ever do." },
+    { "id": 195, "category": "Hard Truths", "text": "Be careful who you trust; even salt looks like sugar." },
+    { "id": 196, "category": "Hard Truths", "text": "The truth will set you free, but first, it will make you miserable." },
+    { "id": 197, "category": "Hard Truths", "text": "Stop trying to find yourself and start creating yourself." },
+    { "id": 198, "category": "Hard Truths", "text": "Everyone dies, but not everyone truly lives." },
+    { "id": 199, "category": "Hard Truths", "text": "Regret is much heavier than discipline." },
+    { "id": 200, "category": "Hard Truths", "text": "Kindness is the highest form of intelligence." }
+];
+
+        let autoSlide;
+
+        function getWisdom() {
+            const randomIndex = Math.floor(Math.random() * wisdomList.length);
+            const selectedQuote = wisdomList[randomIndex];
+            
+            document.getElementById("quote-text").innerText = '"' + selectedQuote.text + '"';
+            document.getElementById("category-text").innerText = selectedQuote.category;
+
+            // Update Background
+            const randomSig = Math.floor(Math.random() * 1000);
+            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://picsum.photos/1920/1080?nature,landscape&sig=${randomSig}')`;
+            
+            // Reset Progress Bar
+            const bar = document.getElementById("progress-bar");
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.transition = 'width 7s linear';
+                bar.style.width = '100%';
+            }, 50);
+        }
+
+        function resetTimer() {
+            clearInterval(autoSlide);
+            getWisdom();
+            startAutoSlide();
+        }
+
+        function startAutoSlide() {
+            autoSlide = setInterval(getWisdom, 7000);
+        }
+
+        // Start the app
+        getWisdom();
+        startAutoSlide();
+    </script>
+</body>
+</html>
